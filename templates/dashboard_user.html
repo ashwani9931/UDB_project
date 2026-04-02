@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal - CourseHub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #7c3aed;
+            --color-primary-dark: #6d28d9;
+            --color-primary-light: #a78bfa;
+            --color-bg: #0f172a;
+            --color-surface: #1e293b;
+            --color-surface-light: #334155;
+            --color-text: #f1f5f9;
+            --color-text-secondary: #cbd5e1;
+            --color-text-tertiary: #94a3b8;
+            --color-border: rgba(148, 163, 184, 0.15);
+            --color-success: #10b981;
+            --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
+            --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, var(--color-bg) 0%, #1a2332 100%);
+            color: var(--color-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(124, 58, 237, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Glass Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 72px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 48px;
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(12px) saturate(180%);
+            border-bottom: 1px solid var(--color-border);
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .navbar:hover {
+            background: rgba(15, 23, 42, 0.7);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 18px;
+            background: linear-gradient(135deg, #a78bfa, var(--color-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+
+        .logout-btn {
+            padding: 10px 20px;
+            background: rgba(148, 163, 184, 0.1);
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .logout-btn:hover {
+            background: rgba(148, 163, 184, 0.15);
+            border-color: rgba(148, 163, 184, 0.4);
+        }
+
+        /* Main Content */
+        .container {
+            margin-top: 72px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 48px;
+        }
+
+        .header-section {
+            margin-bottom: 48px;
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-title {
+            font-size: 40px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #fff, var(--color-text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-subtitle {
+            font-size: 16px;
+            color: var(--color-text-tertiary);
+        }
+
+        /* Grid Layouts */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .stat-card {
+            padding: 32px;
+            border-radius: 16px;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid var(--color-border);
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover {
+            background: rgba(30, 41, 59, 0.6);
+            border-color: rgba(148, 163, 184, 0.5);
+            transform: translateY(-6px);
+            box-shadow: 0 8px 32px rgba(124, 58, 237, 0.15);
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, var(--color-text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Course Grid */
+        .courses-section {
+            margin-bottom: 64px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 28px;
+        }
+
+        .course-card {
+            border-radius: 16px;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid var(--color-border);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .course-card:hover {
+            background: rgba(30, 41, 59, 0.7);
+            border-color: rgba(148, 163, 184, 0.5);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(124, 58, 237, 0.2);
+        }
+
+        .course-header {
+            height: 160px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .course-header::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 70%, rgba(255, 255, 255, 0.1), transparent);
+        }
+
+        .course-body {
+            padding: 28px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .course-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .course-description {
+            font-size: 14px;
+            color: var(--color-text-tertiary);
+            margin-bottom: 16px;
+            flex: 1;
+            line-height: 1.6;
+        }
+
+        .course-meta {
+            font-size: 13px;
+            color: var(--color-text-tertiary);
+            padding-top: 16px;
+            border-top: 1px solid var(--color-border);
+            margin-bottom: 16px;
+        }
+
+        .course-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .form-input {
+            padding: 11px 14px;
+            background: rgba(148, 163, 184, 0.1);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            color: var(--color-text);
+            font-size: 13px;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .form-input::placeholder {
+            color: var(--color-text-tertiary);
+        }
+
+        .form-input:focus {
+            outline: none;
+            background: rgba(148, 163, 184, 0.15);
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .btn-enroll {
+            padding: 11px 20px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-enroll:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-enroll:active {
+            transform: scale(0.98);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 40px;
+            border-radius: 16px;
+            background: rgba(30, 41, 59, 0.3);
+            border: 1px solid var(--color-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .empty-icon {
+            font-size: 56px;
+            margin-bottom: 16px;
+        }
+
+        .empty-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            font-size: 15px;
+            color: var(--color-text-tertiary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 32px;
+            }
+
+            .courses-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 24px;
+                height: 64px;
+            }
+
+            .container {
+                padding: 24px;
+                margin-top: 64px;
+            }
+
+            .header-title {
+                font-size: 28px;
+            }
+
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+
+            .search-btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-right {
+                gap: 12px;
+            }
+
+            .logout-btn {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .header-title {
+                font-size: 24px;
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+
+            .search-input {
+                font-size: 13px;
+            }
+
+            .search-btn {
+                font-size: 13px;
+                padding: 12px 20px;
+            }
+        }
+
+        /* Search Bar */
+        .search-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 48px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 14px 18px;
+            background: rgba(148, 163, 184, 0.1);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            color: var(--color-text);
+            font-size: 14px;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .search-input::placeholder {
+            color: var(--color-text-tertiary);
+        }
+
+        .search-input:focus {
+            outline: none;
+            background: rgba(148, 163, 184, 0.15);
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .search-btn {
+            padding: 14px 28px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+
+        .search-btn:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <img src="{{ url_for('static', filename='logo.png') }}" onerror="this.src='{{ url_for('static', filename='logo.jpeg') }}'" alt="CourseHub Logo" style="width: 90px; height: 90px; border-radius: 8px; object-fit: contain; object-position: left center;">
+        </div>
+        <div class="navbar-right">
+            <div class="user-menu">
+                <div class="user-avatar">{{ user_initial }}</div>
+                <span style="font-size: 14px;">{{ user_name }}</span>
+            </div>
+            <a href="{{ url_for('logout') }}" class="logout-btn">Sign Out</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Header -->
+        <div class="header-section">
+            <h1 class="header-title">Welcome back, {{ user_name }} ✨</h1>
+            <p class="header-subtitle">Continue your learning journey with premium courses</p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">📚 Enrolled Courses</div>
+                <div class="stat-value">{{ enrolled_count }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">✅ Completed Courses</div>
+                <div class="stat-value">{{ completed_count }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">🚀 In Progress</div>
+                <div class="stat-value">{{ in_progress_count }}</div>
+            </div>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-container">
+            <form action="{{ url_for('search') }}" method="get" style="display: flex; gap: 12px; width: 100%;">
+                <input 
+                    type="text" 
+                    name="q" 
+                    class="search-input" 
+                    placeholder="🔍 Search courses by title, topic, or instructor..." 
+                    value="{{ search_query|default('') }}"
+                >
+                <button type="submit" class="search-btn">Search</button>
+            </form>
+        </div>
+
+        <!-- Courses Section -->
+        <div class="courses-section">
+            <div class="section-header">
+                <h2 class="section-title">{% if search_query %}Search Results for "{{ search_query }}"{% else %}Available Courses{% endif %}</h2>
+            </div>
+
+            {% if courses %}
+            <div class="courses-grid">
+                {% for c in courses %}
+                <div class="course-card">
+                    <div class="course-header">📖</div>
+                    <div class="course-body">
+                        <h3 class="course-title">{{ c.title }}</h3>
+                        <p class="course-description">{{ c.description }}</p>
+                        <div class="course-meta">👨‍🏫 {{ c.instructor }}</div>
+                        <form action="{{ url_for('enroll') }}" method="post" class="course-form">
+                            <input type="text" name="name" class="form-input" placeholder="Your Full Name" required>
+                            <input type="email" name="email" class="form-input" placeholder="Email Address" required>
+                            <input type="hidden" name="course_id" value="{{ c._id }}">
+                            <button type="submit" class="btn-enroll">Enroll Now</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">📚</div>
+                <h3 class="empty-title">{% if search_query %}No Results Found{% else %}No Courses Available{% endif %}</h3>
+                <p class="empty-text">{% if search_query %}Try searching with different keywords or <a href="{{ url_for('dashboard_user') }}" style="color: var(--color-primary-light); text-decoration: none;">browse all courses</a>{% else %}Check back soon for exciting new learning opportunities{% endif %}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

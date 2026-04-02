@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CourseHub - Project Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1a2332 100%);
+            color: #f1f5f9;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .presentation {
+            width: 100%;
+            max-width: 1000px;
+            aspect-ratio: 16 / 9;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            padding: 60px 80px;
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            justify-content: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .slide h1 {
+            font-size: 3.5em;
+            color: #0f172a;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #7c3aed, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide h2 {
+            font-size: 2.5em;
+            color: #0f172a;
+            margin-bottom: 40px;
+        }
+
+        .slide p, .slide li {
+            font-size: 1.3em;
+            color: #475569;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .slide ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .slide li {
+            margin-bottom: 25px;
+            padding-left: 40px;
+            position: relative;
+        }
+
+        .slide li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+
+        .slide1 {
+            background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%);
+            justify-content: space-around;
+        }
+
+        .slide1 h1 {
+            color: white;
+            -webkit-text-fill-color: white;
+            font-size: 4em;
+            margin-bottom: 10px;
+        }
+
+        .slide1 .subtitle {
+            font-size: 1.8em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 30px;
+        }
+
+        .slide1 .tagline {
+            font-size: 1.2em;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: #1e293b;
+        }
+
+        button {
+            background: #7c3aed;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #6d28d9;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .slide-counter {
+            color: #cbd5e1;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .feature-item {
+            background: rgba(124, 58, 237, 0.1);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid #7c3aed;
+        }
+
+        .feature-item strong {
+            color: #0f172a;
+            font-size: 1.2em;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .tech-item {
+            background: rgba(59, 130, 246, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .tech-item strong {
+            color: #0f172a;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .tech-item p {
+            font-size: 0.95em;
+            margin: 0;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <!-- Slide 1: Title Slide -->
+        <div class="slide slide1 active">
+            <div>
+                <h1>🎓 CourseHub</h1>
+                <p class="subtitle">The Coding & Development Academy</p>
+            </div>
+            <div style="text-align: center;">
+                <p class="tagline">Advanced Learning Management System with Analytics & Real-time Monitoring</p>
+                <p style="color: rgba(255, 255, 255, 0.8); font-size: 1em; margin-top: 40px;">April 2026</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Key Features -->
+        <div class="slide">
+            <h2>Key Features & Highlights</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <strong>📊 Interactive Dashboard</strong>
+                    <p>Admin analytics with Chart.js visualizations for courses, revenue, enrollments, and ratings</p>
+                </div>
+                <div class="feature-item">
+                    <strong>💰 Revenue Tracking</strong>
+                    <p>Real-time revenue analysis in Indian Rupees with detailed course-wise breakdown</p>
+                </div>
+                <div class="feature-item">
+                    <strong>📈 Advanced Reporting</strong>
+                    <p>Comprehensive enrollment analytics with student distribution and trend analysis</p>
+                </div>
+                <div class="feature-item">
+                    <strong>⭐ Rating System</strong>
+                    <p>Course quality metrics with average ratings and student feedback integration</p>
+                </div>
+                <div class="feature-item">
+                    <strong>🔍 Full-text Search</strong>
+                    <p>MongoDB full-text search for courses by title, description, and topics</p>
+                </div>
+                <div class="feature-item">
+                    <strong>🎨 Modern UI</strong>
+                    <p>Dark theme with glass morphism, responsive design, and smooth animations</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Technical Architecture -->
+        <div class="slide">
+            <h2>Technical Stack & Architecture</h2>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <strong>🐍 Backend</strong>
+                    <p>Flask Framework<br>Python 3.13<br>RESTful APIs</p>
+                </div>
+                <div class="tech-item">
+                    <strong>🗄️ Database</strong>
+                    <p>MongoDB<br>PyMongo Driver<br>Aggregation Pipelines</p>
+                </div>
+                <div class="tech-item">
+                    <strong>🎨 Frontend</strong>
+                    <p>HTML5 & CSS3<br>Jinja2 Templates<br>Chart.js Visualizations</p>
+                </div>
+                <div class="tech-item">
+                    <strong>📊 Analytics</strong>
+                    <p>Chart.js Library<br>4 Chart Types<br>Real-time Data</p>
+                </div>
+                <div class="tech-item">
+                    <strong>🖼️ Image Processing</strong>
+                    <p>PIL/Pillow<br>Background Removal<br>Auto-cropping</p>
+                </div>
+                <div class="tech-item">
+                    <strong>🔐 Security</strong>
+                    <p>Password Hashing<br>Session Management<br>Role-based Access</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Results & Impact -->
+        <div class="slide">
+            <h2>Live Dashboard & Results</h2>
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-number">33</div>
+                    <div class="stat-label">Total Courses</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">Active Enrollments</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">₹465</div>
+                    <div class="stat-label">Monthly Revenue</div>
+                </div>
+            </div>
+            <ul style="margin-top: 40px;">
+                <li><strong>Interactive Modal Dialogs:</strong> Click stat panels to view detailed course information</li>
+                <li><strong>Real-time Analytics:</strong> 4 visualization types showing popular courses, revenue analysis, enrollments, and categories</li>
+                <li><strong>Professional Branding:</strong> Large, cropped logo with transparent background across all pages</li>
+                <li><strong>Mobile Responsive:</strong> Fully optimized for desktop, tablet, and mobile devices</li>
+            </ul>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <span class="slide-counter"><span id="currentSlide">1</span> / 4</span>
+            <button id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 4;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            
+            if (n > totalSlides) {
+                currentSlide = totalSlides;
+            }
+            if (n < 1) {
+                currentSlide = 1;
+            }
+
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[currentSlide - 1].classList.add('active');
+
+            document.getElementById('currentSlide').textContent = currentSlide;
+            document.getElementById('prevBtn').disabled = currentSlide === 1;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+        }
+
+        function changeSlide(n) {
+            currentSlide += n;
+            showSlide(currentSlide);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+        });
+
+        // Initialize
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>

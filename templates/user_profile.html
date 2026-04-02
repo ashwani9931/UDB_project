@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Course Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #764ba2;
+        }
+
+        /* Page Title */
+        .page-title {
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .page-title h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        /* Main Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 15px;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .profile-email {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .profile-body {
+            padding: 25px;
+        }
+
+        .info-section {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-section:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            font-size: 16px;
+            color: #333;
+            font-weight: 500;
+            word-break: break-all;
+        }
+
+        .user-id-display {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .copy-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #764ba2;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+            text-transform: uppercase;
+        }
+
+        /* Enrolled Courses Section */
+        .courses-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .course-card {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .course-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+        }
+
+        .course-category {
+            font-size: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .course-title {
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .course-body {
+            padding: 15px;
+        }
+
+        .course-meta {
+            display: flex;
+            gap: 10px;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .course-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 12px;
+        }
+
+        .course-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #f8f9fa;
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .empty-text {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .browse-courses-btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .browse-courses-btn:hover {
+            background: #764ba2;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-title h1 {
+                font-size: 28px;
+            }
+
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo"><img src="{{ url_for('static', filename='logo.png') }}" onerror="this.src='{{ url_for('static', filename='logo.jpeg') }}'" alt="CourseHub Logo" style="width: 100px; height: 100px; border-radius: 10px; object-fit: contain; object-position: left center;"></div>
+                <div class="nav-links">
+                    <a href="/popular-courses">Browse Courses</a>
+                    <a href="/user/profile">My Profile</a>
+                    <a href="/logout" class="logout-btn">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Page Title -->
+        <div class="page-title">
+            <h1>👤 My Profile</h1>
+        </div>
+
+        <!-- Profile & Stats -->
+        <div class="content-grid">
+            <!-- Profile Card -->
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="profile-avatar">{{ user.name[0]|upper }}</div>
+                    <div class="profile-name">{{ user.name }}</div>
+                    <div class="profile-email">{{ user.email }}</div>
+                </div>
+
+                <div class="profile-body">
+                    <!-- User ID (Unique Identifier) -->
+                    <div class="info-section">
+                        <div class="info-label">Unique User ID</div>
+                        <div class="user-id-display">
+                            <div class="info-value" style="flex: 1;">{{ user_id }}</div>
+                            <button class="copy-btn" onclick="copyToClipboard('{{ user_id }}')">Copy</button>
+                        </div>
+                    </div>
+
+                    <!-- Join Date -->
+                    <div class="info-section">
+                        <div class="info-label">Member Since</div>
+                        <div class="info-value">
+                            {{ user.created_at.strftime('%B %d, %Y') if user.created_at else 'N/A' }}
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="info-section">
+                        <div class="info-label">Account Status</div>
+                        <div class="info-value">
+                            <span style="background: #d4edda; color: #155724; padding: 4px 12px; border-radius: 12px; display: inline-block;">
+                                ✓ {{ user.status|capitalize }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Role -->
+                    <div class="info-section">
+                        <div class="info-label">Account Type</div>
+                        <div class="info-value">{{ user.role|capitalize }}</div>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value">{{ enrolled_count }}</div>
+                            <div class="stat-label">Enrolled Courses</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">{{ (enrolled_count * 20)|min(100) }}%</div>
+                            <div class="stat-label">Learning Progress</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <!-- Account Actions -->
+                <div class="profile-card">
+                    <div class="profile-header" style="background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);">
+                        <div class="profile-name" style="font-size: 18px;">Account Settings</div>
+                    </div>
+                    <div class="profile-body">
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <a href="/dashboard" style="display: block; padding: 12px; background: #f8f9fa; border-radius: 6px; text-decoration: none; color: #333; font-weight: 500; text-align: center; transition: background 0.3s;" onmouseover="this.style.background='#eee'" onmouseout="this.style.background='#f8f9fa'">
+                                📚 Dashboard
+                            </a>
+                            <a href="/popular-courses" style="display: block; padding: 12px; background: #f8f9fa; border-radius: 6px; text-decoration: none; color: #333; font-weight: 500; text-align: center; transition: background 0.3s;" onmouseover="this.style.background='#eee'" onmouseout="this.style.background='#f8f9fa'">
+                                ⭐ Popular Courses
+                            </a>
+                            <a href="/logout" style="display: block; padding: 12px; background: #f8f9fa; border-radius: 6px; text-decoration: none; color: #e74c3c; font-weight: 500; text-align: center; transition: background 0.3s;" onmouseover="this.style.background='#ffe6e6'" onmouseout="this.style.background='#f8f9fa'">
+                                🚪 Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enrollment Info -->
+                <div class="profile-card">
+                    <div class="profile-header" style="background: linear-gradient(135deg, #f39c12 0%, #d68910 100%);">
+                        <div class="profile-name" style="font-size: 18px;">Enrollment Info</div>
+                    </div>
+                    <div class="profile-body">
+                        <div class="info-section">
+                            <div class="info-label">Total Courses</div>
+                            <div class="info-value" style="font-size: 24px; color: #f39c12;">{{ enrolled_count }}</div>
+                        </div>
+                        <div class="info-section" style="border-bottom: none;">
+                            <div class="info-label">Learning Status</div>
+                            <div style="height: 8px; background: #eee; border-radius: 4px; overflow: hidden; margin-top: 10px;">
+                                <div style="height: 100%; width: {{ (enrolled_count * 20)|min(100) }}%; background: linear-gradient(90deg, #f39c12, #e74c3c); transition: width 0.3s;"></div>
+                            </div>
+                            <div style="text-align: center; color: #999; font-size: 12px; margin-top: 8px;">{{ (enrolled_count * 20)|min(100) }}% Active</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enrolled Courses -->
+        <div class="courses-section">
+            <h2 class="section-title">📚 My Enrolled Courses</h2>
+            
+            {% if enrolled_courses %}
+            <div class="courses-grid">
+                {% for course in enrolled_courses %}
+                <div class="course-card">
+                    <div class="course-header">
+                        <div class="course-category">{{ course.category }}</div>
+                        <div class="course-title">{{ course.title }}</div>
+                    </div>
+                    <div class="course-body">
+                        <div class="course-meta">
+                            <div class="meta-item">👨‍🏫 {{ course.instructor }}</div>
+                            <div class="meta-item">⏱️ {{ course.duration_hours }} hrs</div>
+                        </div>
+                        <div class="course-meta">
+                            <div class="meta-item">⭐ {{ course.rating }} / 5.0</div>
+                            <div class="meta-item">📊 {{ course.level }}</div>
+                        </div>
+                        <div class="course-price">${{ "%.2f"|format(course.price) }}</div>
+                        <div class="course-actions">
+                            <a href="/course/{{ course._id }}" class="btn">View Course</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">📚</div>
+                <div class="empty-title">No Courses Yet</div>
+                <div class="empty-text">You haven't enrolled in any courses yet. Start your learning journey today!</div>
+                <a href="/popular-courses" class="browse-courses-btn">Browse Popular Courses</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>&copy; 2026 Course Hub. All rights reserved.</p>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('User ID copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+    </script>
+</body>
+</html>

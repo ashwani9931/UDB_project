@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CourseHub</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f4f6fb;
+}
+
+/* 🔷 Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #4f46e5;
+    padding: 15px 30px;
+    color: white;
+    position: sticky;
+    top: 0;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.logo span {
+    background: white;
+    color: #4f46e5;
+    padding: 5px 10px;
+    border-radius: 6px;
+    margin-right: 8px;
+}
+
+.nav-links a {
+    color: white;
+    margin-left: 20px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.nav-links a:hover {
+    text-decoration: underline;
+}
+
+/* 🔷 Container */
+.container {
+    width: 90%;
+    margin: auto;
+    padding: 20px;
+}
+
+/* 🔷 Cards */
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+    transition: 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* 🔷 Forms */
+.form-box {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+input {
+    padding: 8px;
+    margin: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+button {
+    padding: 8px 15px;
+    background: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #4338ca;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- 🔥 NAVBAR -->
+<div class="navbar">
+    <div class="logo">
+        <img src="{{ url_for('static', filename='logo.png') }}" onerror="this.src='{{ url_for('static', filename='logo.jpeg') }}'" alt="CourseHub Logo" style="width: 90px; height: 90px; border-radius: 8px; object-fit: contain; object-position: left center;">
+    </div>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/report">Report</a>
+    </div>
+</div>
+
+<div class="container">
+
+<!-- Add Course -->
+<div class="form-box">
+<h3>➕ Add Course</h3>
+<form action="/add_course" method="post">
+<input name="title" placeholder="Course Title" required>
+<input name="description" placeholder="Description" required>
+<input name="instructor" placeholder="Instructor" required>
+<button>Add</button>
+</form>
+</div>
+
+<!-- Search -->
+<div class="form-box">
+<form action="/search">
+<input name="q" placeholder="Search courses..." required>
+<button>Search</button>
+</form>
+</div>
+
+<h2>📚 Available Courses</h2>
+
+<div class="course-grid">
+{% for c in courses %}
+<div class="card">
+<h3>{{c.title}}</h3>
+<p>{{c.description}}</p>
+<p><b>Instructor:</b> {{c.instructor}}</p>
+
+<form action="/enroll" method="post">
+<input name="name" placeholder="Your Name" required>
+<input name="email" placeholder="Email" required>
+<input type="hidden" name="course_id" value="{{c._id}}">
+<button>Enroll</button>
+</form>
+
+</div>
+{% endfor %}
+</div>
+
+</div>
+
+</body>
+</html>

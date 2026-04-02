@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ course.title }} - CourseHub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+            background: #fafaf9;
+            color: #27272a;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffffff;
+            padding: 16px 32px;
+            border-bottom: 1px solid #e4e4e7;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 18px;
+            color: #27272a;
+        }
+
+        .logo-img {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .navbar a {
+            color: #7c3aed;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .navbar a:hover {
+            color: #6d28d9;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        /* Course Header */
+        .course-header {
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #c4b5fd 100%);
+            color: white;
+            padding: 48px;
+            border-radius: 16px;
+            margin-bottom: 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .course-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .course-header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .course-header h1 {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .course-header > p {
+            font-size: 16px;
+            opacity: 0.95;
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+
+        .course-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 20px;
+            margin-top: 24px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Course Layout */
+        .course-details {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 32px;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid #e4e4e7;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .main-content h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #27272a;
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #27272a;
+            margin-bottom: 16px;
+        }
+
+        .section p {
+            line-height: 1.7;
+            color: #71717a;
+            margin-bottom: 12px;
+        }
+
+        .module {
+            background: #f9f9f8;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border-left: 3px solid #7c3aed;
+            transition: all 0.2s ease;
+        }
+
+        .module:hover {
+            background: #f0f0f0;
+            transform: translateX(4px);
+        }
+
+        .module-name {
+            font-weight: 600;
+            color: #27272a;
+            margin-bottom: 6px;
+        }
+
+        .module-duration {
+            font-size: 13px;
+            color: #a1a1a6;
+        }
+
+        .instructor-info {
+            background: linear-gradient(135deg, #fafaf9 0%, #f4f4f5 100%);
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid #e4e4e7;
+            margin-top: 32px;
+        }
+
+        .instructor-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .instructor-name {
+            font-weight: 600;
+            color: #27272a;
+            margin-bottom: 4px;
+        }
+
+        .instructor-bio {
+            font-size: 13px;
+            color: #71717a;
+            line-height: 1.5;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: #ffffff;
+            padding: 32px;
+            border-radius: 12px;
+            border: 1px solid #e4e4e7;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-item {
+            margin-bottom: 28px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .sidebar-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .sidebar-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #a1a1a6;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #27272a;
+        }
+
+        .sidebar-value.price {
+            color: #7c3aed;
+        }
+
+        .skills-list {
+            font-size: 14px;
+            color: #71717a;
+            line-height: 1.7;
+        }
+
+        .skills-list > div {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        /* Enrollment Form */
+        .enrollment-form {
+            background: #f9f9f8;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e4e4e7;
+            margin: 24px 0;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #27272a;
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #e4e4e7;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            background: #ffffff;
+            color: #27272a;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input::placeholder {
+            color: #a1a1a6;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .btn-enroll {
+            width: 100%;
+            padding: 14px 20px;
+            background: #7c3aed;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 16px;
+        }
+
+        .btn-enroll:hover {
+            background: #6d28d9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+
+        .guarantees {
+            background: #dcfce7;
+            border: 1px solid #86efac;
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 13px;
+            color: #166534;
+            line-height: 1.6;
+            margin-top: 16px;
+        }
+
+        .guarantees > div {
+            display: flex;
+            align-items: fit-start;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .guarantees > div:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .course-details {
+                gap: 24px;
+            }
+
+            .sidebar {
+                position: static;
+                top: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px 16px;
+            }
+
+            .course-details {
+                grid-template-columns: 1fr;
+            }
+
+            .course-header {
+                padding: 32px 24px;
+                margin-bottom: 32px;
+            }
+
+            .course-header h1 {
+                font-size: 28px;
+            }
+
+            .course-meta {
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+            }
+
+            .main-content {
+                padding: 24px;
+            }
+
+            .sidebar {
+                padding: 24px;
+            }
+
+            .enrollment-form {
+                padding: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 12px 16px;
+            }
+
+            .course-header {
+                padding: 24px 16px;
+            }
+
+            .course-header h1 {
+                font-size: 22px;
+            }
+
+            .course-meta {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .main-content {
+                padding: 16px;
+            }
+
+            .sidebar {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='logo.png') }}" onerror="this.src='{{ url_for('static', filename='logo.jpeg') }}'" alt="CourseHub Logo" class="logo-img" style="object-position: left center; width: 140px; height: auto; max-height: 100px;">
+        </div>
+        <a href="{{ url_for('landing') }}">← Back to Courses</a>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Course Header -->
+        <div class="course-header">
+            <div class="course-header-content">
+                <h1>{{ course.title }}</h1>
+                <p>{{ course.description }}</p>
+                
+                <div class="course-meta">
+                    <div class="meta-item">👨‍🏫 {{ course.instructor }}</div>
+                    <div class="meta-item">📚 {{ course.category }}</div>
+                    <div class="meta-item">⏱️ {{ course.duration_hours }} hours</div>
+                    <div class="meta-item">⭐ {{ course.rating }}/5</div>
+                    <div class="meta-item">👥 {{ total_enrollments }} students</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="course-details">
+            <!-- Main Content -->
+            <div class="main-content">
+                <h2>📖 Course Content</h2>
+                
+                {% for chapter in course.content %}
+                <div class="section">
+                    <h3>{{ chapter.topic }}</h3>
+                    {% for module in chapter.modules %}
+                    <div class="module">
+                        <div class="module-name">{{ module.module_name }}</div>
+                        <div class="module-duration">Duration: {{ module.duration }} hours</div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+
+                <div class="section" style="margin-top: 48px; padding-top: 32px; border-top: 2px solid #f0f0f0;">
+                    <h3>📝 What You'll Learn</h3>
+                    <p>This comprehensive course is designed to provide you with all the practical skills you need to succeed in {{ course.category }}.</p>
+                    <p>Through a combination of video lectures, hands-on projects, and real-world examples, you'll build a strong foundation and advanced expertise in the field.</p>
+                    <p>By the end of this course, you'll have completed multiple capstone projects and earned a professional certificate.</p>
+                </div>
+
+                <div class="instructor-info">
+                    <div class="instructor-avatar">{{ course.instructor[0] }}</div>
+                    <div class="instructor-name">{{ course.instructor }}</div>
+                    <p class="instructor-bio">Experienced instructor with expertise in {{ course.category }}. Rating: ⭐ {{ course.rating }}/5 from thousands of satisfied students.</p>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-item">
+                    <div class="sidebar-label">Price</div>
+                    <div class="sidebar-value price">${{ "%.2f"|format(course.price) }}</div>
+                </div>
+
+                <div class="sidebar-item">
+                    <div class="sidebar-label">Difficulty Level</div>
+                    <div class="sidebar-value">{{ course.level }}</div>
+                </div>
+
+                <div class="sidebar-item">
+                    <div class="sidebar-label">Topics Covered</div>
+                    <div class="skills-list">
+                        {% if course.category == "Web Development" %}
+                            <div><span>✓</span> Full-stack development</div>
+                            <div><span>✓</span> Database design</div>
+                            <div><span>✓</span> API development</div>
+                        {% elif course.category == "Cloud Computing" %}
+                            <div><span>✓</span> Cloud infrastructure</div>
+                            <div><span>✓</span> Scalability</div>
+                            <div><span>✓</span> Security best practices</div>
+                        {% elif course.category == "Machine Learning" %}
+                            <div><span>✓</span> Algorithm design</div>
+                            <div><span>✓</span> Data processing</div>
+                            <div><span>✓</span> Model deployment</div>
+                        {% else %}
+                            <div><span>✓</span> {{ course.category }} fundamentals</div>
+                            <div><span>✓</span> Best practices</div>
+                            <div><span>✓</span> Real-world projects</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Enrollment Form -->
+                {% if user_name != 'Guest' %}
+                <form action="{{ url_for('enroll') }}" method="post">
+                    <div class="enrollment-form">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" value="{{ user_name }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required placeholder="your@email.com">
+                        </div>
+                        <input type="hidden" name="course_id" value="{{ course._id }}">
+                        <button type="submit" class="btn-enroll">Enroll Now</button>
+                    </div>
+                </form>
+                {% else %}
+                <button class="btn-enroll" onclick="redirectTo('{{ url_for('login_user') }}')">Login to Enroll</button>
+                {% endif %}
+
+                <div class="guarantees">
+                    <div><span>✓</span> 30-day money-back guarantee</div>
+                    <div><span>✓</span> Lifetime access to content</div>
+                    <div><span>✓</span> Certificate of completion</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function redirectTo(url) {
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>
