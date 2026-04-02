@@ -72,7 +72,7 @@ app.secret_key = 'coursehub_secret_key_2026'
 import os
 from pymongo import MongoClient
 
-MONGO_URI = os.environ.get("MONGO_URI")
+MONGO_URI = os.environ.get("mongodb+srv://ashwani89693_db_user:<ashwani123>@cluster0.qkmabzs.mongodb.net/?appName=Cluster0")
 
 client = MongoClient(MONGO_URI)
 db = client["courseHub"]
