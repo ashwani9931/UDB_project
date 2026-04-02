@@ -69,8 +69,13 @@ process_logo()
 app = Flask(__name__)
 app.secret_key = 'coursehub_secret_key_2026'
 
-client = MongoClient("mongodb://localhost:27017/")
-db = client["course_platform"]
+import os
+from pymongo import MongoClient
+
+MONGO_URI = os.environ.get("MONGO_URI")
+
+client = MongoClient(MONGO_URI)
+db = client["courseHub"]
 
 # Collections
 courses_collection = db["courses"]
