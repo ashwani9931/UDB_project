@@ -115,7 +115,11 @@ http://localhost:5000
 - **Ritam** – Testing & Quality Assurance  
 
 ---
-
+## Access Full Content
+   ## Presentation Video
+   ## PPT Slides
+   ## project doc
+    **Live Demo:** https://drive.google.com/drive/folders/1KCSs2nPt6tuP9WCjo7F8wdl5AzC-Q5cY?usp=sharing
 ## Support
 
 If you find this project useful or learned something from it, consider giving it a star on GitHub.
