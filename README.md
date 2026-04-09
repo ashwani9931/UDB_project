@@ -1,6 +1,6 @@
 # CourseHub – Elevating the Online Learning Experience
 
-**Live Demo:** Explore CourseHub  
+ **Live Demo:** https://udb-project.onrender.com
 
 Empowering educators and inspiring students through a seamless digital classroom.
 
